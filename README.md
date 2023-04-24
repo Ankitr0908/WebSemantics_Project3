@@ -5,9 +5,9 @@ This is a Project to implement SPARQL Search Engine using Apache Jena which take
 
 Tools/Languages/Technologies used (Basic understanding required)-
 VSCode
-Java
-Apache Jena
-SPARQL
+,Java
+,Apache Jena
+,SPARQL
 OWL
 
 You can find the presentation to get an overview of the Project and its purpose (querying and displaying the desired results).
