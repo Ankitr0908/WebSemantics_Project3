@@ -8,7 +8,7 @@ VSCode
 ,Java
 ,Apache Jena
 ,SPARQL
-OWL
+,OWL
 
 You can find the presentation to get an overview of the Project and its purpose (querying and displaying the desired results).
 Ontology File- onto.owl
