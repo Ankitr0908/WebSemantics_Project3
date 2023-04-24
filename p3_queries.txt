@@ -1,0 +1,113 @@
+What are the locations and the types of threats faced by the endangered animal species, and how many species are threatened in each location?
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://www.ecology-and-endangered-species.com#>
+PREFIX living: <https://en.wikipedia.org/wiki/>
+SELECT  ?location ?threat (count(?threat) as ?nbrThreatenedSpecies)
+WHERE {?animal rdfs:subClassOf* living:Animalia .
+	?animal rdfs:subClassOf [ rdf:type owl:Restriction ;
+		owl:onProperty :livesIn;
+		owl:someValuesFrom ?location] .
+	?animal rdfs:subClassOf [ rdf:type owl:Restriction ;
+		owl:onProperty :isThreatenedBy;
+		owl:someValuesFrom ?threat] .
+	?location rdfs:subClassOf :GeographicalLocation}
+GROUP BY ?threat ?location
+ORDER BY DESC(?location)
+
+
+
+
+What are the properties and their corresponding values that define the subclasses of the class equivalent to living:Mollusca?
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX living: <https://en.wikipedia.org/wiki/>
+PREFIX : <http://www.ecology-and-endangered-species.com#>
+SELECT ?subClass ?property ?value
+	WHERE { ?subClass owl:equivalentClass [
+		owl:intersectionOf ( living:Mollusca
+			[rdf:type owl:Restriction ;
+			owl:onProperty ?property ;
+			owl:someValuesFrom ?value]) ;
+		rdf:type owl:Class]
+}
+ORDER BY ASC(?subClass)
+
+
+What are the locations and types of threats faced by the plant species that have both conductor vessels and produce seeds, and how are these species further classified based on their plantae characteristics?
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX living: <https://en.wikipedia.org/wiki/>
+PREFIX : <http://www.ecology-and-endangered-species.com#>
+SELECT ?plante_conductor_seed ?threat ?location
+	WHERE { ?plante rdfs:subClassOf* living:Plantae .
+	 ?plante owl:equivalentClass [ owl:intersectionOf ( ?any_plante
+												    [ rdf:type owl:Restriction ;
+                                                                                           owl:onProperty :hasPlantaeCharacteristic ;
+                                                                                           owl:someValuesFrom :Conductor_Vessels
+                                                                                           ]
+												     ) ; rdf:type owl:Class].
+				?plante_conductor rdfs:subClassOf* ?plante .
+				?plante_conductor owl:equivalentClass [ owl:intersectionOf ( ?any_plant
+												    [ rdf:type owl:Restriction ;
+                                                                                           owl:onProperty :hasPlantaeCharacteristic ;
+                                                                                           owl:someValuesFrom :Produce_Seed
+                                                                                           ]
+												     ) ; rdf:type owl:Class].
+	?plante_conductor_seed rdfs:subClassOf* ?plante_conductor.	?plante_conductor_seed rdfs:subClassOf [ rdf:type owl:Restriction ;
+		owl:onProperty :isThreatenedBy;
+		owl:someValuesFrom ?threat] .
+	?threat rdfs:subClassOf :Threat.	?plante_conductor_seed rdfs:subClassOf [ rdf:type owl:Restriction ;
+		owl:onProperty :livesIn;
+		owl:someValuesFrom ?location] .
+	?location rdfs:subClassOf :GeographicalLocation
+}
+
+
+
+
+
+
+
+What are the living organisms and their corresponding conservation statuses?
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://www.ecology-and-endangered-species.com#>
+PREFIX living: <https://en.wikipedia.org/wiki/>
+SELECT  ?species ?status
+WHERE {?species rdfs:subClassOf [ rdf:type owl:Restriction ;
+        owl:onProperty :hasConservationStatus;
+        owl:someValuesFrom ?status] .
+	?species rdfs:subClassOf* :LivingOrganism}
+ORDER BY ASC(?status)
+
+
+ Query to retrieve all the subclasses and equivalent classes of the Eurasian otter class and returns their properties.
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX : <http://www.ecology-and-endangered-species.com#>
+PREFIX living: <https://en.wikipedia.org/wiki/>
+SELECT ?Eurasian_otter_properties
+WHERE {
+{
+	:Eurasian_otter rdfs:subClassOf ?Eurasian_otter_properties
+}UNION
+{
+	:Eurasian_otter rdfs:subClassOf* ?sub.
+	?sub owl:equivalentClass [
+		owl:intersectionOf (?intersection ?Eurasian_otter_properties) ; rdf:type owl:Class]
+}}
